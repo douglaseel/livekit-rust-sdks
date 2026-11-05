@@ -530,8 +530,8 @@ impl RtcSession {
         options.rtc_config.enable_sctp_snap = true;
 
         let ice_forwarder = match options.ice_forwarder.clone() {
+            // Validated once, by `EngineInner::connect`, before any join attempt.
             Some(fwd) => {
-                fwd.validate().map_err(|e| EngineError::Internal(e.into()))?;
                 if !options.signal_options.single_peer_connection {
                     return Err(EngineError::Internal(
                         "ice forwarder: needs single peer connection mode".into(),
