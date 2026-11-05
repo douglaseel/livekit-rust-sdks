@@ -182,6 +182,9 @@ pub struct SignalOptions {
     /// [`CLIENT_PROTOCOL_DATA_STREAM_RPC`] instead of [`CLIENT_PROTOCOL_DATA_STREAM_V2`].
     #[doc(hidden)]
     pub use_legacy_data_streams: bool,
+    /// Ask the server to run full ICE instead of ICE-lite for this connection,
+    /// so that it sends connectivity checks of its own.
+    pub disable_ice_lite: bool,
 }
 
 impl Default for SignalOptions {
@@ -193,6 +196,7 @@ impl Default for SignalOptions {
             single_peer_connection: false,
             connect_timeout: SIGNAL_CONNECT_TIMEOUT,
             use_legacy_data_streams: false,
+            disable_ice_lite: false,
         }
     }
 }
@@ -820,6 +824,7 @@ fn create_join_request_param(
     let connection_settings = proto::ConnectionSettings {
         auto_subscribe: options.auto_subscribe,
         adaptive_stream: options.adaptive_stream,
+        disable_ice_lite: options.disable_ice_lite,
         ..Default::default()
     };
 
@@ -957,6 +962,10 @@ fn get_livekit_url(
             )
             .append_pair("auto_subscribe", if options.auto_subscribe { "1" } else { "0" })
             .append_pair("adaptive_stream", if options.adaptive_stream { "1" } else { "0" });
+
+        if options.disable_ice_lite {
+            lk_url.query_pairs_mut().append_pair("disable_ice_lite", "1");
+        }
 
         if let Some(sdk_version) = &options.sdk_options.sdk_version {
             lk_url.query_pairs_mut().append_pair("version", sdk_version.as_str());

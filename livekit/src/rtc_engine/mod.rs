@@ -30,6 +30,7 @@ use tokio::sync::{
 };
 use tokio::task::JoinHandle;
 
+pub use self::ice_forwarder::{IceCredentials, IceForwarder};
 pub use self::rtc_session::{SessionStats, INITIAL_BUFFERED_AMOUNT_LOW_THRESHOLD};
 use crate::prelude::ParticipantIdentity;
 use crate::{
@@ -46,6 +47,7 @@ use crate::{
 use crate::{ChatMessage, E2eeManager, TranscriptionSegment};
 
 mod dc_sender;
+pub mod ice_forwarder;
 pub mod lk_runtime;
 mod peer_transport;
 mod reconnect_strategy;
@@ -123,6 +125,8 @@ pub struct EngineOptions {
     pub join_retries: u32,
     /// Enable single peer connection mode
     pub single_peer_connection: bool,
+    /// Send all media through this forwarder. See [`ice_forwarder`].
+    pub ice_forwarder: Option<ice_forwarder::IceForwarder>,
 }
 
 #[derive(Debug)]

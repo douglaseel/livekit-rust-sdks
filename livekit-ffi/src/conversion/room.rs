@@ -14,6 +14,7 @@
 
 use crate::{proto, server::room::FfiRoom};
 use livekit::{
+    IceCredentials, IceForwarder,
     e2ee::{
         key_provider::{KeyProvider, KeyProviderOptions},
         E2eeOptions, EncryptionType,
@@ -236,6 +237,31 @@ impl From<proto::IceServer> for IceServer {
             password: value.password.unwrap_or_default(),
         }
     }
+}
+
+/// Read the ICE forwarder of an `RtcConfig`. An error names the field at fault;
+/// the forwarder is checked further when the room connects.
+pub fn ice_forwarder_from_proto(
+    value: &proto::RtcConfig,
+) -> Result<Option<IceForwarder>, String> {
+    let Some(fwd) = &value.ice_forwarder else {
+        return Ok(None);
+    };
+    let addresses = fwd
+        .addresses
+        .iter()
+        .map(|a| {
+            a.parse()
+                .map_err(|_| format!("ice forwarder: address {a:?} is not an \"ip:port\" address"))
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    let local_port = u16::try_from(fwd.local_port)
+        .map_err(|_| format!("ice forwarder: local_port {} is not a port", fwd.local_port))?;
+    Ok(Some(IceForwarder {
+        addresses,
+        credentials: IceCredentials { ufrag: fwd.ufrag.clone(), pwd: fwd.pwd.clone() },
+        local_port,
+    }))
 }
 
 impl From<proto::RtcConfig> for RtcConfiguration {
