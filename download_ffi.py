@@ -68,12 +68,17 @@ def target_arch():
 def ffi_version():
     file = os.path.join(os.path.dirname(__file__), "livekit-ffi", "Cargo.toml")
     with open(file, "r") as f:
-        return re.search(r'version\s*=\s*"(\d+\.\d+\.\d+)"', f.read()).group(1)
+        return re.search(r'version\s*=\s*"(\d+\.\d+\.\d+(?:\+[0-9A-Za-z.-]+)?)"', f.read()).group(1)
+
+
+# The repository whose releases hold the FFI builds. This fork publishes its
+# own (see .github/workflows/patch-ffi-release.yml); LIVEKIT_FFI_REPO overrides it.
+FFI_REPO = os.environ.get("LIVEKIT_FFI_REPO", "douglaseel/livekit-rust-sdks")
 
 
 def download_ffi(platform, arch, version, output):
     filename = "ffi-%s-%s.zip" % (platform, arch)
-    repo_url = "https://github.com/livekit/rust-sdks/releases/download"
+    repo_url = "https://github.com/%s/releases/download" % FFI_REPO
     new_url = "%s/livekit-ffi/v%s/%s" % (repo_url, version, filename)
     old_url = "%s/rust-sdks/livekit-ffi@%s/%s" % (repo_url, version, filename)
 
