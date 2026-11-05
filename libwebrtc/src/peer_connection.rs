@@ -330,6 +330,8 @@ mod tests {
             continual_gathering_policy: ContinualGatheringPolicy::GatherOnce,
             ice_transport_type: IceTransportsType::All,
             enable_sctp_snap: false,
+            port_range: None,
+            disable_tcp_candidates: false,
         };
 
         let bob = factory.create_peer_connection(config.clone()).unwrap();
