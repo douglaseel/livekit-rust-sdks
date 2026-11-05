@@ -9,7 +9,7 @@ name: FFI patch release
 on:
   push:
     tags:
-      - "livekit-ffi/v*+patch.*"
+      - 'livekit-ffi/v*\+patch.*'
   workflow_dispatch:
 
 permissions:
