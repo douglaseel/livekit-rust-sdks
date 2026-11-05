@@ -3705,7 +3705,7 @@ dependencies = [
 
 [[package]]
 name = "livekit-ffi"
-version = "0.12.80"
+version = "0.12.80+patch.1"
 dependencies = [
  "bytes",
  "console-subscriber",
