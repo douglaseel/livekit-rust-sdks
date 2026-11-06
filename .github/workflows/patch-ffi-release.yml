@@ -2,15 +2,15 @@
 # GitHub Release that download_ffi.py reads.
 #
 # A release is a tag "livekit-ffi/v<livekit-ffi Cargo.toml version>", for
-# example "livekit-ffi/v0.13.2-p1": the upstream version this branch is based
-# on, with a "-pN" for this fork's Nth patch release of it. workflow_dispatch builds without
+# example "livekit-ffi/v0.13.2-1": the upstream version this branch is based
+# on, with a "-N" for this fork's Nth release of it. workflow_dispatch builds without
 # publishing.
 name: FFI patch release
 
 on:
   push:
     tags:
-      - 'livekit-ffi/v*-p*'
+      - 'livekit-ffi/v[0-9]*.[0-9]*.[0-9]*-[0-9]*'
   workflow_dispatch:
 
 permissions:
