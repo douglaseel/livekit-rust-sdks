@@ -68,7 +68,7 @@ def target_arch():
 def ffi_version():
     file = os.path.join(os.path.dirname(__file__), "livekit-ffi", "Cargo.toml")
     with open(file, "r") as f:
-        return re.search(r'version\s*=\s*"(\d+\.\d+\.\d+(?:\+[0-9A-Za-z.-]+)?)"', f.read()).group(1)
+        return re.search(r'version\s*=\s*"(\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?)"', f.read()).group(1)
 
 
 # The repository whose releases hold the FFI builds. This fork publishes its
