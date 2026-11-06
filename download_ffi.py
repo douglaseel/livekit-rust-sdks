@@ -73,7 +73,7 @@ def ffi_version():
 
 # The repository whose releases hold the FFI builds. This fork publishes its
 # own (see .github/workflows/patch-ffi-release.yml); LIVEKIT_FFI_REPO overrides it.
-FFI_REPO = os.environ.get("LIVEKIT_FFI_REPO", "douglaseel/livekit-rust-sdks")
+FFI_REPO = os.environ.get("LIVEKIT_FFI_REPO", "reactor-team/livekit-rust-sdks")
 
 
 def download_ffi(platform, arch, version, output):
